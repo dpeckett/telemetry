@@ -1,1 +1,3 @@
 # telemetry
+
+Anonymized Telemetry API.
