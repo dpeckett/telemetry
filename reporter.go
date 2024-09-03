@@ -35,8 +35,6 @@ const (
 type Configuration struct {
 	// BaseURL is the telemetry server base URL.
 	BaseURL string
-	// AuthToken is the telemetry API auth bearer token.
-	AuthToken string
 	// Tags is a list of optional tags to include in all telemetry reports.
 	Tags []string
 	// HTTPClient is the optional HTTP client to use for telemetry reporting.
@@ -47,7 +45,6 @@ type Configuration struct {
 type Reporter struct {
 	logger       *slog.Logger
 	client       *v1alpha1.TelemetryEventClient
-	authToken    string
 	sessionID    string
 	tags         []string
 	reportsCtx   context.Context
@@ -68,7 +65,6 @@ func NewReporter(ctx context.Context, logger *slog.Logger, conf Configuration) *
 	return &Reporter{
 		logger:     logger,
 		client:     v1alpha1.NewTelemetryEventClient(httpClient, conf.BaseURL),
-		authToken:  conf.AuthToken,
 		sessionID:  util.GenerateID(16),
 		tags:       conf.Tags,
 		reportsCtx: reportsCtx,

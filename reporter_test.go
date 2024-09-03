@@ -32,9 +32,8 @@ func TestReporter(t *testing.T) {
 
 	// Create a new telemetry reporter.
 	conf := telemetry.Configuration{
-		BaseURL:   server.URL,
-		AuthToken: "test-token",
-		Tags:      []string{"test-tag"},
+		BaseURL: server.URL,
+		Tags:    []string{"test-tag"},
 	}
 
 	ctx := context.Background()
@@ -78,9 +77,8 @@ func TestReporter_DoNotTrack(t *testing.T) {
 
 	// Create a new telemetry reporter.
 	conf := telemetry.Configuration{
-		BaseURL:   server.URL,
-		AuthToken: "test-token",
-		Tags:      []string{"test-tag"},
+		BaseURL: server.URL,
+		Tags:    []string{"test-tag"},
 	}
 
 	ctx := context.Background()
@@ -104,8 +102,34 @@ func TestReporter_DoNotTrack(t *testing.T) {
 	}
 
 	// Shutdown the reporter to ensure graceful exit.
-	err := reporter.Shutdown(ctx)
-	require.NoError(t, err)
+	require.NoError(t, reporter.Shutdown(ctx))
+}
+
+func TestReporter_EndToEnd(t *testing.T) {
+	slog.SetDefault(slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
+		Level: slog.LevelDebug,
+	})))
+
+	// Create a new telemetry reporter.
+	conf := telemetry.Configuration{
+		BaseURL: "https://telemetry.pecke.tt",
+		Tags:    []string{"test"},
+	}
+
+	ctx := context.Background()
+	reporter := telemetry.NewReporter(ctx, slog.Default(), conf)
+
+	// Report a telemetry event.
+	reporter.ReportEvent(&v1alpha1.TelemetryEvent{
+		Kind: v1alpha1.TelemetryEventKindInfo,
+		Name: "TestEvent",
+		Values: map[string]string{
+			"key1": "value1",
+		},
+	})
+
+	// Shutdown the reporter to ensure graceful exit.
+	require.NoError(t, reporter.Shutdown(ctx))
 }
 
 func mockTelemetryServer(t *testing.T) (*httptest.Server, chan *v1alpha1.TelemetryEvent) {
