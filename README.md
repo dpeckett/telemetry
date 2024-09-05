@@ -1,6 +1,6 @@
 # telemetry
 
-Anonymized Telemetry API. Why write my own? Because OMG the existing projects in 
+Anonymous Telemetry API. Why write my own? Because OMG the existing projects in 
 this space are an absolute cesspool of complexity and over-engineering.
 
 ## Opting Out
