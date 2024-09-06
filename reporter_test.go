@@ -112,7 +112,7 @@ func TestReporter_EndToEnd(t *testing.T) {
 
 	// Create a new telemetry reporter.
 	conf := telemetry.Configuration{
-		BaseURL: "https://telemetry.pecke.tt",
+		BaseURL: "https://telemetry.dpeckett.dev",
 		Tags:    []string{"test"},
 	}
 
